@@ -1,0 +1,4028 @@
+
+html_code = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShadowFetch — Universal Media Downloader</title>
+    <meta name="description" content="Download videos and audio from any social media platform. Fast, minimalist, and beautiful.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           SHADOWFETCH — UNIVERSAL MEDIA DOWNLOADER
+           A minimalist, theme-rich video downloader
+           Designed for simplicity and elegance
+           ============================================ */
+
+        /* CSS Custom Properties for Dynamic Theming */
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --bg-card: #141414;
+            --bg-hover: #1f1f1f;
+            --bg-input: #0d0d0d;
+            --text-primary: #f5f5f5;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --accent: #e8e8e8;
+            --accent-hover: #ffffff;
+            --accent-soft: rgba(232, 232, 232, 0.1);
+            --border: #222222;
+            --border-light: #2a2a2a;
+            --shadow: rgba(0, 0, 0, 0.4);
+            --glow: rgba(255, 255, 255, 0.05);
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --error: #f87171;
+            --info: #60a5fa;
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Theme: Soft White */
+        [data-theme="soft-white"] {
+            --bg-primary: #fafafa;
+            --bg-secondary: #f5f5f5;
+            --bg-tertiary: #eeeeee;
+            --bg-card: #ffffff;
+            --bg-hover: #f0f0f0;
+            --bg-input: #f8f8f8;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --accent: #1a1a1a;
+            --accent-hover: #000000;
+            --accent-soft: rgba(26, 26, 26, 0.06);
+            --border: #e5e5e5;
+            --border-light: #eeeeee;
+            --shadow: rgba(0, 0, 0, 0.08);
+            --glow: rgba(0, 0, 0, 0.03);
+        }
+
+        /* Theme: Ocean Blue */
+        [data-theme="ocean-blue"] {
+            --bg-primary: #0c1222;
+            --bg-secondary: #111827;
+            --bg-tertiary: #1a2332;
+            --bg-card: #131b2c;
+            --bg-hover: #1e293b;
+            --bg-input: #0f172a;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent: #38bdf8;
+            --accent-hover: #7dd3fc;
+            --accent-soft: rgba(56, 189, 248, 0.1);
+            --border: #1e293b;
+            --border-light: #334155;
+            --shadow: rgba(0, 0, 0, 0.5);
+            --glow: rgba(56, 189, 248, 0.08);
+            --success: #34d399;
+            --warning: #fbbf24;
+            --error: #fb7185;
+            --info: #60a5fa;
+        }
+
+        /* Theme: Sunset Orange */
+        [data-theme="sunset-orange"] {
+            --bg-primary: #1a0f0a;
+            --bg-secondary: #221511;
+            --bg-tertiary: #2d1a12;
+            --bg-card: #261811;
+            --bg-hover: #3d2318;
+            --bg-input: #1f120d;
+            --text-primary: #fef3e2;
+            --text-secondary: #d4a574;
+            --text-muted: #a67c52;
+            --accent: #f4a261;
+            --accent-hover: #f4d03f;
+            --accent-soft: rgba(244, 162, 97, 0.1);
+            --border: #3d2318;
+            --border-light: #4a2e20;
+            --shadow: rgba(0, 0, 0, 0.5);
+            --glow: rgba(244, 162, 97, 0.08);
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --error: #e74c3c;
+            --info: #3498db;
+        }
+
+        /* ============================================
+           RESET & BASE STYLES
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color var(--transition-slow), color var(--transition-slow);
+            line-height: 1.6;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--accent-soft);
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           ANIMATIONS & KEYFRAMES
+           ============================================ */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes ripple {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            70% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px var(--glow); }
+            50% { box-shadow: 0 0 40px var(--glow), 0 0 60px var(--glow); }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================
+           LAYOUT STRUCTURE
+           ============================================ */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* ============================================
+           SIDEBAR NAVIGATION
+           Minimalist vertical navigation with icons
+           ============================================ */
+        .sidebar {
+            width: 72px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            z-index: 100;
+            transition: width var(--transition-base), background var(--transition-slow);
+            overflow: hidden;
+        }
+
+        .sidebar:hover {
+            width: 220px;
+        }
+
+        .sidebar-logo {
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all var(--transition-base);
+            white-space: nowrap;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        .sidebar:hover .sidebar-logo {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .sidebar-logo-icon {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            background: var(--accent);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            padding: 0 12px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            color: var(--text-secondary);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--accent);
+            border-radius: 0 4px 4px 0;
+            transform: scaleY(0);
+            transition: transform var(--transition-fast);
+        }
+
+        .sidebar-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .sidebar-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .sidebar-item.active {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .sidebar-item.active::before {
+            transform: scaleY(1);
+        }
+
+        .sidebar-item svg {
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
+            stroke-width: 2;
+            transition: transform var(--transition-fast);
+        }
+
+        .sidebar-item:hover svg {
+            transform: scale(1.1);
+        }
+
+        .sidebar-item span {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all var(--transition-base);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .sidebar:hover .sidebar-item span {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            width: 100%;
+            padding: 0 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* ============================================
+           MAIN CONTENT AREA
+           ============================================ */
+        .main-content {
+            flex: 1;
+            margin-left: 72px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: margin-left var(--transition-base);
+        }
+
+        /* ============================================
+           TOP HEADER BAR
+           Minimalist header with search and actions
+           ============================================ */
+        .top-header {
+            height: 64px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .header-badge {
+            background: var(--accent-soft);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--border-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .header-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
+        }
+
+        .header-btn .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--error);
+            border-radius: 50%;
+            border: 2px solid var(--bg-card);
+            animation: pulse 2s infinite;
+        }
+
+        /* ============================================
+           HERO SECTION
+           The main download interface
+           ============================================ */
+        .hero-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 32px;
+            position: relative;
+            min-height: calc(100vh - 64px);
+        }
+
+        /* Background ambient effect */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .hero-bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .hero-bg-orb:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            top: -100px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .hero-bg-orb:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            bottom: -50px;
+            right: -50px;
+            animation-delay: -4s;
+            opacity: 0.1;
+        }
+
+        .hero-bg-orb:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            background: var(--accent);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -2s;
+            opacity: 0.08;
+        }
+
+        /* Hero Content */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 720px;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Mascot / Logo Animation */
+        .hero-mascot {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 32px;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-mascot svg {
+            width: 100%;
+            height: 100%;
+            color: var(--accent);
+        }
+
+        .hero-mascot-glow {
+            position: absolute;
+            inset: -20px;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: glow 4s ease-in-out infinite;
+        }
+
+        /* Typography */
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            font-weight: 400;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        /* ============================================
+           DOWNLOAD INPUT SECTION
+           The core functionality interface
+           ============================================ */
+        .download-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 8px;
+            box-shadow: 0 20px 60px var(--shadow), 0 0 0 1px var(--border-light);
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            animation: wave 3s linear infinite;
+            opacity: 0.5;
+        }
+
+        .download-container:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px var(--shadow), 0 0 0 1px var(--accent-soft), 0 0 30px var(--glow);
+            transform: translateY(-2px);
+        }
+
+        .download-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--bg-input);
+            border-radius: var(--radius-lg);
+            border: 1px solid transparent;
+            transition: all var(--transition-fast);
+        }
+
+        .download-input-wrapper:focus-within {
+            border-color: var(--border-light);
+        }
+
+        .download-icon {
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .download-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+
+        .download-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: var(--font-primary);
+            font-weight: 400;
+            min-width: 0;
+        }
+
+        .download-input::placeholder {
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .download-paste-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .download-paste-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--border-light);
+            transform: translateY(-1px);
+        }
+
+        .download-paste-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2;
+        }
+
+        /* Download Options Bar */
+        .download-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px 8px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .download-mode-group {
+            display: flex;
+            gap: 8px;
+            background: var(--bg-input);
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+
+        .download-mode-btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-primary);
+        }
+
+        .download-mode-btn:hover {
+            color: var(--text-primary);
+            background: var(--bg-hover);
+        }
+
+        .download-mode-btn.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            font-weight: 600;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .download-mode-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2;
+        }
+
+        .download-action-btn {
+            padding: 12px 32px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-action-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .download-action-btn:hover::after {
+            transform: translateX(100%);
+        }
+
+        .download-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--shadow), 0 0 20px var(--glow);
+        }
+
+        .download-action-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-action-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2.5;
+        }
+
+        .download-action-btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .download-action-btn.loading svg {
+            animation: spin 1s linear infinite;
+        }
+
+        /* ============================================
+           PLATFORM DETECTION INDICATORS
+           Shows which platform was detected
+           ============================================ */
+        .platform-detected {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 24px;
+            min-height: 40px;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .platform-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent);
+            animation: popIn 0.4s ease-out;
+        }
+
+        .platform-badge svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .platform-quality {
+            display: flex;
+            gap: 6px;
+        }
+
+        .quality-chip {
+            padding: 6px 12px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .quality-chip:hover {
+            border-color: var(--border-light);
+            color: var(--text-primary);
+            background: var(--bg-hover);
+        }
+
+        .quality-chip.active {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ============================================
+           SUPPORTED PLATFORMS GRID
+           Visual showcase of supported services
+           ============================================ */
+        .platforms-section {
+            padding: 80px 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: var(--accent-soft);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .platforms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .platform-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--accent-soft) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+
+        .platform-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-light);
+            box-shadow: 0 12px 32px var(--shadow);
+        }
+
+        .platform-card:hover::before {
+            opacity: 1;
+        }
+
+        .platform-card-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-input);
+            border-radius: var(--radius-md);
+            position: relative;
+            z-index: 1;
+            transition: transform var(--transition-base);
+        }
+
+        .platform-card:hover .platform-card-icon {
+            transform: scale(1.1);
+        }
+
+        .platform-card-icon svg {
+            width: 24px;
+            height: 24px;
+            color: var(--accent);
+        }
+
+        .platform-card-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .platform-card-status {
+            font-size: 0.75rem;
+            color: var(--success);
+            margin-top: 4px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .platform-card-status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* ============================================
+           FEATURES SECTION
+           Why choose ShadowFetch
+           ============================================ */
+        .features-section {
+            padding: 80px 32px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-light);
+            box-shadow: 0 16px 40px var(--shadow);
+        }
+
+        .feature-card:hover::after {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-soft);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: transform var(--transition-base);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            color: var(--accent);
+        }
+
+        .feature-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           STATS SECTION
+           Social proof and metrics
+           ============================================ */
+        .stats-section {
+            padding: 60px 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 32px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-base);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-light);
+            box-shadow: 0 12px 32px var(--shadow);
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* ============================================
+           SETTINGS MODAL
+           Comprehensive settings panel
+           ============================================ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-base);
+            padding: 24px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 560px;
+            max-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.95) translateY(20px);
+            transition: transform var(--transition-base);
+            box-shadow: 0 24px 80px var(--shadow);
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--border-light);
+            transform: rotate(90deg);
+        }
+
+        .modal-close svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
+        }
+
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 28px;
+        }
+
+        .settings-group {
+            margin-bottom: 28px;
+        }
+
+        .settings-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .theme-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .theme-option {
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theme-option:hover {
+            border-color: var(--border-light);
+            background: var(--bg-hover);
+        }
+
+        .theme-option.active {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .theme-preview {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .theme-preview.matte-black {
+            background: #0a0a0a;
+        }
+
+        .theme-preview.soft-white {
+            background: #fafafa;
+            border-color: #e5e5e5;
+        }
+
+        .theme-preview.ocean-blue {
+            background: #0c1222;
+        }
+
+        .theme-preview.sunset-orange {
+            background: #1a0f0a;
+        }
+
+        .theme-info {
+            flex: 1;
+        }
+
+        .theme-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: block;
+        }
+
+        .theme-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Toggle Switch */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toggle-row:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-info h4 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .toggle-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            background: var(--bg-input);
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            transition: transform var(--transition-fast);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(22px);
+            background: var(--bg-primary);
+        }
+
+        /* Select Dropdown */
+        .settings-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            outline: none;
+            transition: all var(--transition-fast);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
+        }
+
+        .settings-select:focus {
+            border-color: var(--accent);
+        }
+
+        .settings-select option {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .modal-footer {
+            padding: 20px 28px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: var(--font-primary);
+            border: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--border-light);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        /* ============================================
+           DONATE MODAL
+           SaaS monetization through donations
+           ============================================ */
+        .donate-options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .donate-tier {
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .donate-tier:hover {
+            border-color: var(--border-light);
+            background: var(--bg-hover);
+            transform: translateX(4px);
+        }
+
+        .donate-tier.active {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .donate-tier-amount {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            min-width: 60px;
+        }
+
+        .donate-tier-info {
+            flex: 1;
+        }
+
+        .donate-tier-name {
+            font-weight: 600;
+            font-size: 1rem;
+            display: block;
+        }
+
+        .donate-tier-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .donate-custom {
+            margin-top: 16px;
+        }
+
+        .donate-custom-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: var(--font-primary);
+            outline: none;
+            transition: all var(--transition-fast);
+        }
+
+        .donate-custom-input:focus {
+            border-color: var(--accent);
+        }
+
+        .donate-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .donate-method {
+            padding: 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .donate-method:hover {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+            transform: translateY(-2px);
+        }
+
+        .donate-method svg {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .donate-method:hover svg {
+            color: var(--accent);
+        }
+
+        .donate-method-name {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .donate-message {
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--accent-soft);
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .donate-message p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .donate-message strong {
+            color: var(--accent);
+        }
+
+        /* ============================================
+           DOWNLOAD PROGRESS & RESULTS
+           Shows download status and results
+           ============================================ */
+        .download-result {
+            margin-top: 32px;
+            animation: fadeInScale 0.5s ease-out;
+            display: none;
+        }
+
+        .download-result.active {
+            display: block;
+        }
+
+        .result-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: 0 16px 48px var(--shadow);
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-thumbnail {
+            width: 80px;
+            height: 60px;
+            background: var(--bg-input);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .result-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .result-thumbnail-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+
+        .result-thumbnail-placeholder svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .result-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .result-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .result-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .result-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .result-meta svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .result-body {
+            padding: 24px 28px;
+        }
+
+        .quality-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .quality-option {
+            padding: 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: center;
+        }
+
+        .quality-option:hover {
+            border-color: var(--border-light);
+            background: var(--bg-hover);
+        }
+
+        .quality-option.active {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .quality-option-res {
+            font-weight: 700;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .quality-option-format {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .quality-option-size {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .result-btn {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-family: var(--font-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+        }
+
+        .result-btn-primary {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .result-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--shadow);
+        }
+
+        .result-btn-secondary {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .result-btn-secondary:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-light);
+        }
+
+        .result-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 24px;
+            display: none;
+        }
+
+        .progress-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .progress-percent {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .progress-bar-bg {
+            height: 6px;
+            background: var(--bg-input);
+            border-radius: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+            border-radius: 100px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* ============================================
+           TOAST NOTIFICATIONS
+           Beautiful toast messages
+           ============================================ */
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 300;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 32px var(--shadow);
+            animation: slideInRight 0.4s ease-out, fadeOut 0.4s ease-out 4.6s forwards;
+            pointer-events: all;
+            max-width: 360px;
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(20px); }
+        }
+
+        .toast-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast-icon.success {
+            background: rgba(74, 222, 128, 0.1);
+            color: var(--success);
+        }
+
+        .toast-icon.error {
+            background: rgba(248, 113, 113, 0.1);
+            color: var(--error);
+        }
+
+        .toast-icon.info {
+            background: rgba(96, 165, 250, 0.1);
+            color: var(--info);
+        }
+
+        .toast-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .toast-message {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .toast-close {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+            flex-shrink: 0;
+        }
+
+        .toast-close:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .toast-close svg {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2;
+        }
+
+        /* ============================================
+           FOOTER
+           Minimalist footer with links
+           ============================================ */
+        .footer {
+            padding: 40px 32px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-brand-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .footer-brand-name {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-copy {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           Mobile-first responsive adjustments
+           ============================================ */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                padding: 0;
+                border: none;
+            }
+            
+            .sidebar.mobile-open {
+                width: 220px;
+                padding: 24px 0;
+                border-right: 1px solid var(--border);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .download-options {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .download-action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .platforms-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .top-header {
+                padding: 0 16px;
+            }
+            
+            .hero-section {
+                padding: 40px 16px;
+            }
+            
+            .platforms-section,
+            .features-section,
+            .stats-section {
+                padding: 60px 16px;
+            }
+            
+            .theme-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .donate-methods {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-actions {
+                flex-direction: column;
+            }
+            
+            .mobile-menu-btn {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .download-container {
+                border-radius: var(--radius-lg);
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mobile menu button */
+        .mobile-menu-btn {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-right: 12px;
+        }
+
+        .mobile-menu-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+        }
+
+        /* ============================================
+           LOADING STATES & SKELETONS
+           ============================================ */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-input) 25%, var(--bg-hover) 50%, var(--bg-input) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: var(--radius-sm);
+        }
+
+        .skeleton-text {
+            height: 12px;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-text:last-child {
+            margin-bottom: 0;
+        }
+
+        .skeleton-title {
+            height: 20px;
+            width: 60%;
+            margin-bottom: 12px;
+        }
+
+        /* ============================================
+           EMPTY STATES
+           ============================================ */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: var(--bg-input);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-state-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke-width: 1.5;
+        }
+
+        .empty-state-title {
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .empty-state-desc {
+            font-size: 0.85rem;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        /* ============================================
+           HISTORY SECTION
+           Download history tracking
+           ============================================ */
+        .history-section {
+            padding: 40px 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            display: none;
+        }
+
+        .history-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .history-item:hover {
+            border-color: var(--border-light);
+            background: var(--bg-hover);
+            transform: translateX(4px);
+        }
+
+        .history-thumb {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-input);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .history-thumb svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+        }
+
+        .history-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .history-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .history-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 12px;
+        }
+
+        .history-status {
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .history-status.completed {
+            background: rgba(74, 222, 128, 0.1);
+            color: var(--success);
+        }
+
+        .history-status.failed {
+            background: rgba(248, 113, 113, 0.1);
+            color: var(--error);
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .history-item:hover .history-actions {
+            opacity: 1;
+        }
+
+        .history-action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .history-action-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--border-light);
+        }
+
+        .history-action-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2;
+        }
+
+        /* ============================================
+           ABOUT SECTION
+           Information about the app
+           ============================================ */
+        .about-section {
+            padding: 40px 32px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            display: none;
+        }
+
+        .about-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .about-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            margin-bottom: 24px;
+        }
+
+        .about-card h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .about-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .about-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-version {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: var(--accent-soft);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .about-team {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .team-member {
+            text-align: center;
+            padding: 24px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            transition: all var(--transition-fast);
+        }
+
+        .team-member:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-light);
+        }
+
+        .team-avatar {
+            width: 56px;
+            height: 56px;
+            background: var(--accent-soft);
+            border-radius: 50%;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .team-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .team-role {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* ============================================
+           UPDATES SECTION
+           Changelog and updates
+           ============================================ */
+        .updates-section {
+            padding: 40px 32px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            display: none;
+        }
+
+        .updates-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .update-item {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            margin-bottom: 16px;
+            transition: all var(--transition-fast);
+        }
+
+        .update-item:hover {
+            border-color: var(--border-light);
+            transform: translateX(4px);
+        }
+
+        .update-timeline {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .update-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 4px var(--accent-soft);
+        }
+
+        .update-line {
+            width: 2px;
+            flex: 1;
+            background: var(--border);
+        }
+
+        .update-content {
+            flex: 1;
+        }
+
+        .update-version {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .update-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .update-changes {
+            list-style: none;
+        }
+
+        .update-changes li {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 4px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .update-changes li::before {
+            content: '→';
+            color: var(--accent);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .update-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-left: 8px;
+        }
+
+        .update-badge.new {
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        .update-badge.fix {
+            background: rgba(248, 113, 113, 0.1);
+            color: var(--error);
+        }
+
+        .update-badge.improvement {
+            background: rgba(74, 222, 128, 0.1);
+            color: var(--success);
+        }
+
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .fade-in-scale {
+            animation: fadeInScale 0.5s ease-out;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-1 { margin-top: 4px; }
+        .mt-2 { margin-top: 8px; }
+        .mt-3 { margin-top: 12px; }
+        .mt-4 { margin-top: 16px; }
+        .mt-6 { margin-top: 24px; }
+        .mt-8 { margin-top: 32px; }
+
+        .mb-1 { margin-bottom: 4px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-3 { margin-bottom: 12px; }
+        .mb-4 { margin-bottom: 16px; }
+        .mb-6 { margin-bottom: 24px; }
+        .mb-8 { margin-bottom: 32px; }
+
+        /* ============================================
+           CURSOR EFFECTS
+           Custom cursor for interactive elements
+           ============================================ */
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        /* ============================================
+           FOCUS STYLES
+           Accessible focus indicators
+           ============================================ */
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* ============================================
+           REDUCED MOTION
+           Respect user preferences
+           ============================================ */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ============================================
+           PRINT STYLES
+           Clean printing
+           ============================================ */
+        @media print {
+            .sidebar, .top-header, .footer, .modal-overlay, .toast-container {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body data-theme="matte-black">
+    <!-- Toast Container for Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- App Container -->
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">SF</div>
+                <span>ShadowFetch</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="sidebar-item active" data-page="home" onclick="navigateTo('home')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                    </svg>
+                    <span>Home</span>
+                </a>
+                <a href="#" class="sidebar-item" data-page="history" onclick="navigateTo('history')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span>History</span>
+                </a>
+                <a href="#" class="sidebar-item" data-page="updates" onclick="navigateTo('updates')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 0 0-2.455 2.456Z" />
+                    </svg>
+                    <span>Updates</span>
+                </a>
+                <a href="#" class="sidebar-item" data-page="about" onclick="navigateTo('about')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                    </svg>
+                    <span>About</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="#" class="sidebar-item" onclick="openSettings()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 0 1 0 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 0 1 0-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    <span>Settings</span>
+                </a>
+                <a href="#" class="sidebar-item" onclick="openDonate()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg>
+                    <span>Donate</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
+                    <span class="header-title">ShadowFetch</span>
+                    <span class="header-badge">v2.0</span>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn" onclick="openSettings()" title="Settings">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 0 1 0 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 0 1 0-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        </svg>
+                    </button>
+                    <button class="header-btn" onclick="openDonate()" title="Support Us">
+                        <span class="notification-dot"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- HOME PAGE -->
+            <div id="page-home" class="page-content">
+                <!-- Hero Section -->
+                <section class="hero-section">
+                    <div class="hero-bg">
+                        <div class="hero-bg-orb"></div>
+                        <div class="hero-bg-orb"></div>
+                        <div class="hero-bg-orb"></div>
+                    </div>
+                    
+                    <div class="hero-content">
+                        <!-- Mascot -->
+                        <div class="hero-mascot">
+                            <div class="hero-mascot-glow"></div>
+                            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3"/>
+                                <path d="M35 40 L45 50 L35 60" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <path d="M65 40 L55 50 L65 60" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                                <circle cx="50" cy="50" r="8" fill="currentColor" opacity="0.8"/>
+                                <path d="M30 75 Q50 85 70 75" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.5"/>
+                            </svg>
+                        </div>
+                        
+                        <h1 class="hero-title">Download Anything.<br>From Anywhere.</h1>
+                        <p class="hero-subtitle">The most elegant video downloader for all social media platforms. Fast, secure, and beautifully simple.</p>
+                        
+                        <!-- Download Container -->
+                        <div class="download-container">
+                            <div class="download-input-wrapper">
+                                <div class="download-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                                    </svg>
+                                </div>
+                                <input type="text" class="download-input" id="downloadInput" placeholder="paste the link here" autocomplete="off">
+                                <button class="download-paste-btn" onclick="pasteFromClipboard()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.184 1.272M9.75 9.75l10.5-10.5" />
+                                    </svg>
+                                    paste
+                                </button>
+                            </div>
+                            
+                            <div class="download-options">
+                                <div class="download-mode-group">
+                                    <button class="download-mode-btn active" data-mode="auto" onclick="setDownloadMode('auto')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
+                                        </svg>
+                                        auto
+                                    </button>
+                                    <button class="download-mode-btn" data-mode="audio" onclick="setDownloadMode('audio')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 1 1-.99-3.467l2.31-.66a2.25 2.25 0 0 0 1.632-2.163Zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 0 1-1.632 2.163l-1.32.377a1.803 1.803 0 0 1-.99-3.467l2.31-.66A2.25 2.25 0 0 0 9 15.553Z" />
+                                        </svg>
+                                        audio
+                                    </button>
+                                    <button class="download-mode-btn" data-mode="mute" onclick="setDownloadMode('mute')">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
+                                        </svg>
+                                        mute
+                                    </button>
+                                </div>
+                                <button class="download-action-btn" id="downloadBtn" onclick="startDownload()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M7.5 12 12 16.5m0 0L16.5 12m-4.5 4.5V3" />
+                                    </svg>
+                                    download
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Platform Detection -->
+                        <div class="platform-detected" id="platformDetected"></div>
+                        
+                        <!-- Download Result -->
+                        <div class="download-result" id="downloadResult">
+                            <div class="result-card">
+                                <div class="result-header">
+                                    <div class="result-thumbnail" id="resultThumbnail">
+                                        <div class="result-thumbnail-placeholder">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="result-info">
+                                        <div class="result-title" id="resultTitle">Video Title</div>
+                                        <div class="result-meta">
+                                            <span id="resultDuration">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                                                3:45
+                                            </span>
+                                            <span id="resultPlatform">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/></svg>
+                                                YouTube
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="result-body">
+                                    <div class="quality-options" id="qualityOptions"></div>
+                                    <div class="progress-container" id="progressContainer">
+                                        <div class="progress-header">
+                                            <span class="progress-label" id="progressLabel">Downloading...</span>
+                                            <span class="progress-percent" id="progressPercent">0%</span>
+                                        </div>
+                                        <div class="progress-bar-bg">
+                                            <div class="progress-bar-fill" id="progressBarFill" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="result-actions" id="resultActions">
+                                        <button class="result-btn result-btn-primary" onclick="confirmDownload()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M7.5 12 12 16.5m0 0L16.5 12m-4.5 4.5V3" />
+                                            </svg>
+                                            Download Now
+                                        </button>
+                                        <button class="result-btn result-btn-secondary" onclick="cancelDownload()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                            </svg>
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Supported Platforms -->
+                <section class="platforms-section">
+                    <div class="section-header">
+                        <span class="section-label">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                            </svg>
+                            Supported Services
+                        </span>
+                        <h2 class="section-title">One Tool. Every Platform.</h2>
+                        <p class="section-desc">We support all major social media and video platforms with regular updates for new services.</p>
+                    </div>
+                    
+                    <div class="platforms-grid" id="platformsGrid"></div>
+                </section>
+
+                <!-- Features -->
+                <section class="features-section">
+                    <div class="features-container">
+                        <div class="section-header">
+                            <span class="section-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" />
+                                </svg>
+                                Why ShadowFetch
+                            </span>
+                            <h2 class="section-title">Built Different.</h2>
+                            <p class="section-desc">Every detail crafted for the perfect downloading experience.</p>
+                        </div>
+                        
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
+                                    </svg>
+                                </div>
+                                <h3 class="feature-title">Lightning Fast</h3>
+                                <p class="feature-desc">Optimized download engine that fetches your media in seconds, not minutes. No throttling, no limits.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                                    </svg>
+                                </div>
+                                <h3 class="feature-title">100% Secure</h3>
+                                <p class="feature-desc">No data collection, no tracking, no malware. Your privacy is our priority. Downloads happen locally.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                                    </svg>
+                                </div>
+                                <h3 class="feature-title">Mobile Ready</h3>
+                                <p class="feature-desc">Works flawlessly on every device. Desktop, tablet, or phone — the experience stays perfect.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.048 4.025a3 3 0 0 1-4.293 0 2.25 2.25 0 0 0-2.25-2.25h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .78.35 1.49.91 1.97" />
+                                    </svg>
+                                </div>
+                                <h3 class="feature-title">4 Themes</h3>
+                                <p class="feature-desc">Matte Black, Soft White, Ocean Blue, and Sunset Orange. Choose the vibe that matches your style.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 1.361 11.218M5.636 19.114a9 9 0 0 1-1.361-11.218m14.042 5.636a9 9 0 0 0 1.361-11.218M5.636 5.636a9 9 0 0 0-1.361 11.218m11.218-14.042a9 9 0 0 1 11.218 1.361M5.636 19.114a9 9 0 0 0 11.218-1.361" />
+                                    </svg>
+                                </div>
+                                <h3 class="feature-title">Always Updated</h3>
+                                <p class="feature-desc">Our team constantly updates the platform support. New site? We will have it working within 24 hours.</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                                    </svg>
+                                </div>
+                                <h3 class="feature-title">No Watermarks</h3>
+                                <p class="feature-desc">Clean downloads without any watermarks or branding. Get the original quality, every single time.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Stats -->
+                <section class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="statDownloads">2.4M+</div>
+                            <div class="stat-label">Downloads</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="statPlatforms">15+</div>
+                            <div class="stat-label">Platforms</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="statUsers">500K+</div>
+                            <div class="stat-label">Happy Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="statUptime">99.9%</div>
+                            <div class="stat-label">Uptime</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- HISTORY PAGE -->
+            <div id="page-history" class="history-section">
+                <div class="section-header">
+                    <span class="section-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                        Download History
+                    </span>
+                    <h2 class="section-title">Your Downloads</h2>
+                    <p class="section-desc">All your recent downloads in one place. Re-download anytime.</p>
+                </div>
+                <div class="history-list" id="historyList"></div>
+            </div>
+
+            <!-- UPDATES PAGE -->
+            <div id="page-updates" class="updates-section">
+                <div class="section-header">
+                    <span class="section-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z" />
+                        </svg>
+                        Changelog
+                    </span>
+                    <h2 class="section-title">What is New</h2>
+                    <p class="section-desc">Track our journey. Every update makes ShadowFetch better.</p>
+                </div>
+                <div id="updatesList"></div>
+            </div>
+
+            <!-- ABOUT PAGE -->
+            <div id="page-about" class="about-section">
+                <div class="section-header">
+                    <span class="section-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                        </svg>
+                        About Us
+                    </span>
+                    <h2 class="section-title">Our Story</h2>
+                    <p class="section-desc">Built with passion by developers who love clean design.</p>
+                </div>
+                
+                <div class="about-card">
+                    <span class="about-version">Version 2.0.0 — Latest Release</span>
+                    <h2>The Problem We Solved</h2>
+                    <p>Every video downloader on the internet looks like it was built in 2005. Cluttered interfaces, annoying ads, watermarks, and shady tracking. We were tired of it.</p>
+                    <p>ShadowFetch was born from a simple idea: what if downloading videos was actually enjoyable? What if the tool itself was so beautiful that you wanted to use it?</p>
+                    <h2 style="margin-top: 24px;">Our Philosophy</h2>
+                    <p>Minimalism is not about having less. It is about having exactly what you need, presented in the most elegant way possible. Every pixel, every animation, every interaction has been carefully crafted.</p>
+                    <p>We believe software should respect its users. No dark patterns, no forced registrations, no data harvesting. Just a tool that works beautifully and gets out of your way.</p>
+                </div>
+                
+                <div class="about-card">
+                    <h2>Meet the Team</h2>
+                    <div class="about-team">
+                        <div class="team-member">
+                            <div class="team-avatar">AK</div>
+                            <div class="team-name">Alex Khan</div>
+                            <div class="team-role">Founder & Lead Dev</div>
+                        </div>
+                        <div class="team-member">
+                            <div class="team-avatar">SM</div>
+                            <div class="team-name">Sarah Miller</div>
+                            <div class="team-role">UI/UX Designer</div>
+                        </div>
+                        <div class="team-member">
+                            <div class="team-avatar">RJ</div>
+                            <div class="team-name">Ryan Jones</div>
+                            <div class="team-role">Backend Engineer</div>
+                        </div>
+                        <div class="team-member">
+                            <div class="team-avatar">EP</div>
+                            <div class="team-name">Emma Park</div>
+                            <div class="team-role">Platform Support</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <div class="footer-brand-icon">SF</div>
+                        <span class="footer-brand-name">ShadowFetch</span>
+                    </div>
+                    <div class="footer-links">
+                        <a class="footer-link" onclick="openSettings()">Settings</a>
+                        <a class="footer-link" onclick="openDonate()">Donate</a>
+                        <a class="footer-link" onclick="navigateTo('about')">About</a>
+                        <a class="footer-link" onclick="navigateTo('updates')">Updates</a>
+                    </div>
+                    <div class="footer-copy">© 2026 ShadowFetch. Built with love.</div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Settings</h3>
+                <button class="modal-close" onclick="closeSettings()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-group">
+                    <span class="settings-label">Appearance</span>
+                    <div class="theme-options">
+                        <div class="theme-option active" data-theme="matte-black" onclick="setTheme('matte-black')">
+                            <div class="theme-preview matte-black"></div>
+                            <div class="theme-info">
+                                <span class="theme-name">Matte Black</span>
+                                <span class="theme-desc">Deep dark elegance</span>
+                            </div>
+                        </div>
+                        <div class="theme-option" data-theme="soft-white" onclick="setTheme('soft-white')">
+                            <div class="theme-preview soft-white"></div>
+                            <div class="theme-info">
+                                <span class="theme-name">Soft White</span>
+                                <span class="theme-desc">Clean and bright</span>
+                            </div>
+                        </div>
+                        <div class="theme-option" data-theme="ocean-blue" onclick="setTheme('ocean-blue')">
+                            <div class="theme-preview ocean-blue"></div>
+                            <div class="theme-info">
+                                <span class="theme-name">Ocean Blue</span>
+                                <span class="theme-desc">Deep sea vibes</span>
+                            </div>
+                        </div>
+                        <div class="theme-option" data-theme="sunset-orange" onclick="setTheme('sunset-orange')">
+                            <div class="theme-preview sunset-orange"></div>
+                            <div class="theme-info">
+                                <span class="theme-name">Sunset Orange</span>
+                                <span class="theme-desc">Warm and cozy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <span class="settings-label">Download Preferences</span>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <h4>Auto-download Best Quality</h4>
+                            <p>Automatically select highest available quality</p>
+                        </div>
+                        <div class="toggle-switch active" id="toggleAutoQuality" onclick="toggleSetting(this)"></div>
+                    </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <h4>Show Download Notifications</h4>
+                            <p>Display toast when download completes</p>
+                        </div>
+                        <div class="toggle-switch active" id="toggleNotifications" onclick="toggleSetting(this)"></div>
+                    </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <h4>Save Download History</h4>
+                            <p>Keep track of your downloads locally</p>
+                        </div>
+                        <div class="toggle-switch active" id="toggleHistory" onclick="toggleSetting(this)"></div>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <span class="settings-label">Default Format</span>
+                    <select class="settings-select" id="defaultFormat">
+                        <option value="mp4">MP4 (Video)</option>
+                        <option value="mp3">MP3 (Audio)</option>
+                        <option value="webm">WebM (Video)</option>
+                        <option value="m4a">M4A (Audio)</option>
+                    </select>
+                </div>
+                
+                <div class="settings-group">
+                    <span class="settings-label">Language</span>
+                    <select class="settings-select" id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="ur">اردو</option>
+                        <option value="ar">العربية</option>
+                        <option value="zh">中文</option>
+                        <option value="ja">日本語</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeSettings()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveSettings()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Donate Modal -->
+    <div class="modal-overlay" id="donateModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Support ShadowFetch</h3>
+                <button class="modal-close" onclick="closeDonate()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="donate-message">
+                    <p>ShadowFetch is <strong>free and open source</strong>. Your donation keeps the servers running and the team motivated to add new features.</p>
+                </div>
+                
+                <div class="settings-group" style="margin-top: 24px;">
+                    <span class="settings-label">Choose Amount</span>
+                    <div class="donate-options">
+                        <div class="donate-tier" data-amount="5" onclick="selectDonateTier(this)">
+                            <div class="donate-tier-amount">$5</div>
+                            <div class="donate-tier-info">
+                                <span class="donate-tier-name">Coffee</span>
+                                <span class="donate-tier-desc">Buy us a coffee</span>
+                            </div>
+                        </div>
+                        <div class="donate-tier active" data-amount="10" onclick="selectDonateTier(this)">
+                            <div class="donate-tier-amount">$10</div>
+                            <div class="donate-tier-info">
+                                <span class="donate-tier-name">Pizza</span>
+                                <span class="donate-tier-desc">Fuel for late night coding</span>
+                            </div>
+                        </div>
+                        <div class="donate-tier" data-amount="25" onclick="selectDonateTier(this)">
+                            <div class="donate-tier-amount">$25</div>
+                            <div class="donate-tier-info">
+                                <span class="donate-tier-name">Supporter</span>
+                                <span class="donate-tier-desc">Get a shoutout in our updates</span>
+                            </div>
+                        </div>
+                        <div class="donate-tier" data-amount="50" onclick="selectDonateTier(this)">
+                            <div class="donate-tier-amount">$50</div>
+                            <div class="donate-tier-info">
+                                <span class="donate-tier-name">Champion</span>
+                                <span class="donate-tier-desc">Priority feature requests</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="donate-custom">
+                        <input type="number" class="donate-custom-input" id="customAmount" placeholder="Or enter custom amount..." min="1">
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <span class="settings-label">Payment Method</span>
+                    <div class="donate-methods">
+                        <div class="donate-method" onclick="selectPaymentMethod(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-1.5-6.75A2.25 2.25 0 0 0 18.75 0H5.25A2.25 2.25 0 0 0 3 2.25v15A2.25 2.25 0 0 0 5.25 19.5h13.5A2.25 2.25 0 0 0 21 17.25v-15a2.25 2.25 0 0 0-2.25-2.25Z" />
+                            </svg>
+                            <span class="donate-method-name">Card</span>
+                        </div>
+                        <div class="donate-method" onclick="selectPaymentMethod(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            <span class="donate-method-name">PayPal</span>
+                        </div>
+                        <div class="donate-method" onclick="selectPaymentMethod(this)">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75" />
+                            </svg>
+                            <span class="donate-method-name">Crypto</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDonate()">Maybe Later</button>
+                <button class="btn btn-primary" onclick="processDonation()">Donate Now</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // SHADOWFETCH — CORE JAVASCRIPT
+        // ============================================
+
+        // State Management
+        const state = {
+            currentTheme: 'matte-black',
+            downloadMode: 'auto',
+            currentPage: 'home',
+            isDownloading: false,
+            selectedQuality: null,
+            downloadHistory: JSON.parse(localStorage.getItem('shadowfetch_history') || '[]'),
+            settings: JSON.parse(localStorage.getItem('shadowfetch_settings') || JSON.stringify({
+                autoQuality: true,
+                notifications: true,
+                saveHistory: true,
+                defaultFormat: 'mp4',
+                language: 'en'
+            }))
+        };
+
+        // Platform Definitions with Icons and Metadata
+        const platforms = [
+            { name: 'YouTube', icon: 'youtube', color: '#FF0000', patterns: ['youtube.com', 'youtu.be'] },
+            { name: 'TikTok', icon: 'tiktok', color: '#000000', patterns: ['tiktok.com'] },
+            { name: 'Instagram', icon: 'instagram', color: '#E4405F', patterns: ['instagram.com'] },
+            { name: 'Twitter / X', icon: 'twitter', color: '#1DA1F2', patterns: ['twitter.com', 'x.com'] },
+            { name: 'Facebook', icon: 'facebook', color: '#1877F2', patterns: ['facebook.com', 'fb.watch'] },
+            { name: 'Reddit', icon: 'reddit', color: '#FF4500', patterns: ['reddit.com', 'redd.it'] },
+            { name: 'Twitch', icon: 'twitch', color: '#9146FF', patterns: ['twitch.tv'] },
+            { name: 'Vimeo', icon: 'vimeo', color: '#1AB7EA', patterns: ['vimeo.com'] },
+            { name: 'Dailymotion', icon: 'dailymotion', color: '#00AAFF', patterns: ['dailymotion.com'] },
+            { name: 'SoundCloud', icon: 'soundcloud', color: '#FF5500', patterns: ['soundcloud.com'] },
+            { name: 'Spotify', icon: 'spotify', color: '#1DB954', patterns: ['spotify.com', 'open.spotify.com'] },
+            { name: 'LinkedIn', icon: 'linkedin', color: '#0A66C2', patterns: ['linkedin.com'] },
+            { name: 'Pinterest', icon: 'pinterest', color: '#BD081C', patterns: ['pinterest.com', 'pin.it'] },
+            { name: 'Snapchat', icon: 'snapchat', color: '#FFFC00', patterns: ['snapchat.com'] },
+            { name: 'Telegram', icon: 'telegram', color: '#26A5E4', patterns: ['t.me', 'telegram.me'] }
+        ];
+
+        // SVG Icons for Platforms
+        const platformIcons = {
+            youtube: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>',
+            tiktok: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>',
+            instagram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>',
+            twitter: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+            facebook: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+            reddit: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>',
+            twitch: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>',
+            vimeo: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197c1.185-1.044 2.351-2.084 3.501-3.128C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.493 4.797l-.013.01z"/></svg>',
+            dailymotion: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.068 11.313c-1.754 0-3.168 1.418-3.168 3.166 0 1.747 1.414 3.166 3.168 3.166 1.753 0 3.166-1.42 3.166-3.166 0-1.748-1.413-3.166-3.166-3.166zm-7.403 0C4.912 11.313 3.5 12.73 3.5 14.479c0 1.747 1.412 3.166 3.165 3.166 1.754 0 3.168-1.42 3.168-3.166 0-1.748-1.414-3.166-3.168-3.166zM24 6.5v11c0 3.466-2.84 6.3-6.334 6.3H6.333C2.84 23.8 0 20.966 0 17.5v-11C0 3.034 2.84.2 6.333.2h11.333C21.16.2 24 3.034 24 6.5z"/></svg>',
+            soundcloud: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.175 12.225c-.051 0-.094.046-.101.1l-.233 2.154.233 2.105c.007.058.05.098.101.098.05 0 .09-.04.099-.098l.255-2.105-.27-2.154c-.009-.06-.052-.1-.084-.1zm-.899.828c-.06 0-.091.037-.104.094L0 14.479l.165 1.308c.014.057.045.094.09.094s.089-.037.099-.094l.195-1.308-.21-1.332c-.01-.057-.044-.094-.063-.094zm1.83-1.229c-.061 0-.12.045-.12.104l-.21 2.563.225 2.458c0 .06.045.104.106.104.061 0 .12-.044.12-.104l.24-2.474-.24-2.547c0-.06-.045-.104-.12-.104zm.945-.089c-.075 0-.135.06-.15.135l-.193 2.64.21 2.544c.016.077.075.138.149.138.075 0 .135-.061.15-.138l.24-2.544-.24-2.64c-.015-.075-.06-.135-.166-.135zm.93-.069c-.09 0-.149.075-.165.165l-.18 2.7.195 2.52c.016.09.075.165.165.165.089 0 .164-.075.164-.165l.21-2.52-.21-2.7c0-.09-.075-.165-.18-.165zm.915-.045c-.105 0-.18.09-.195.18l-.195 2.745.21 2.505c.016.105.09.18.18.18.105 0 .18-.09.195-.18l.225-2.505-.225-2.745c-.015-.105-.09-.18-.195-.18zm.93-.015c-.105 0-.195.09-.21.195l-.18 2.79.195 2.475c.016.12.105.21.21.21.104 0 .194-.09.209-.21l.21-2.475-.21-2.79c-.015-.105-.105-.195-.225-.195zm.945 0c-.12 0-.21.09-.225.21l-.18 2.79.195 2.46c.015.12.105.21.225.21.119 0 .209-.09.224-.21l.21-2.46-.21-2.79c-.015-.12-.105-.21-.239-.21zm.93.015c-.135 0-.225.105-.24.225l-.165 2.775.18 2.445c.016.135.105.225.24.225.134 0 .224-.09.239-.225l.195-2.445-.195-2.775c-.015-.12-.105-.225-.254-.225zm.93.06c-.15 0-.24.12-.255.24l-.165 2.715.18 2.415c.015.15.105.24.255.24.149 0 .239-.105.254-.24l.195-2.415-.195-2.715c-.015-.135-.12-.24-.269-.24zm.915.09c-.15 0-.255.12-.27.255l-.15 2.67.165 2.37c.016.15.12.255.27.255.149 0 .254-.12.269-.255l.18-2.37-.18-2.67c-.015-.15-.12-.255-.284-.255zm.945.135c-.165 0-.27.135-.285.27l-.15 2.595.165 2.34c.015.165.12.27.285.27.164 0 .269-.12.284-.27l.18-2.34-.18-2.595c-.015-.15-.135-.27-.299-.27zm.93.165c-.18 0-.285.15-.3.285l-.135 2.535.15 2.295c.016.18.135.285.3.285.179 0 .284-.15.299-.285l.165-2.295-.165-2.535c-.015-.165-.135-.285-.314-.285zm.945.18c-.195 0-.315.165-.33.315l-.135 2.475.15 2.235c.016.195.135.315.315.315.194 0 .314-.15.329-.315l.165-2.235-.165-2.475c-.015-.18-.15-.315-.329-.315zm.93.21c-.21 0-.33.18-.345.345l-.12 2.4.135 2.175c.015.21.15.345.345.345.209 0 .329-.18.344-.345l.15-2.175-.15-2.4c-.015-.195-.165-.345-.359-.345zm.93.24c-.225 0-.36.195-.375.375l-.12 2.31.135 2.115c.015.225.165.36.375.36.224 0 .359-.18.374-.36l.15-2.115-.15-2.31c-.015-.21-.18-.375-.389-.375zm.93.27c-.24 0-.39.21-.405.405l-.105 2.22.12 2.04c.015.24.18.39.405.39.239 0 .389-.18.404-.39l.135-2.04-.135-2.22c-.015-.225-.195-.405-.419-.405zm.93.285c-.255 0-.42.225-.435.435l-.105 2.115.12 1.965c.015.255.195.42.435.42.254 0 .419-.195.434-.42l.135-1.965-.135-2.115c-.015-.24-.21-.435-.449-.435zm.945.315c-.27 0-.45.24-.465.465l-.09 2.01.105 1.89c.015.27.21.45.465.45.269 0 .449-.21.464-.45l.12-1.89-.12-2.01c-.015-.255-.225-.465-.479-.465zm.93.345c-.3 0-.495.27-.51.51l-.09 1.89.105 1.8c.015.3.225.495.51.495.299 0 .494-.225.509-.495l.12-1.8-.12-1.89c-.015-.285-.24-.51-.524-.51zm.93.36c-.33 0-.54.3-.555.555l-.075 1.77.09 1.71c.015.33.24.54.555.54.329 0 .539-.255.554-.54l.105-1.71-.105-1.77c-.015-.3-.255-.555-.569-.555zm.945.39c-.36 0-.585.315-.6.6l-.075 1.635.09 1.62c.015.36.255.585.6.585.359 0 .584-.24.599-.585l.105-1.62-.105-1.635c-.015-.33-.27-.6-.614-.6zm.93.42c-.405 0-.645.36-.66.66l-.06 1.5.075 1.53c.015.405.27.645.66.645.404 0 .644-.27.659-.645l.09-1.53-.09-1.5c-.015-.36-.3-.66-.674-.66zm.93.45c-.45 0-.72.405-.735.735l-.06 1.35.075 1.44c.015.45.3.72.735.72.449 0 .719-.3.734-.72l.09-1.44-.09-1.35c-.015-.39-.33-.735-.754-.735zm.945.48c-.51 0-.795.465-.81.81l-.045 1.2.06 1.35c.015.51.315.795.81.795.509 0 .794-.315.809-.795l.075-1.35-.075-1.2c-.015-.435-.36-.81-.824-.81zm.93.51c-.585 0-.885.525-.9.9l-.045 1.05.06 1.26c.015.585.33.885.9.885.584 0 .884-.33.899-.885l.075-1.26-.075-1.05c-.015-.495-.39-.9-.914-.9zm.93.555c-.69 0-1.005.63-1.02 1.02l-.03.885.045 1.17c.015.69.345 1.005 1.02 1.005.689 0 1.004-.36 1.019-1.005l.06-1.17-.06-.885c-.015-.57-.42-1.02-1.034-1.02zm.945.6c-.84 0-1.2.78-1.215 1.215l-.015.72.03 1.08c.015.84.39 1.2 1.215 1.2.839 0 1.199-.42 1.214-1.2l.045-1.08-.045-.72c-.015-.66-.48-1.215-1.229-1.215zm.93.66c-1.05 0-1.455.99-1.47 1.47l.015.555.03 1.005c.015 1.05.435 1.455 1.47 1.455 1.049 0 1.454-.465 1.469-1.455l.03-1.005-.03-.555c-.015-.765-.555-1.47-1.484-1.47zm.93.75c-1.35 0-1.815 1.305-1.83 1.83l.045.39.03.945c.015 1.35.495 1.815 1.83 1.815 1.349 0 1.814-.555 1.829-1.815l.03-.945-.03-.39c-.015-.915-.63-1.83-1.844-1.83zm.945.87c-1.8 0-2.34 1.77-2.355 2.355l.075.225.03.93c.015 1.8.57 2.34 2.355 2.34 1.799 0 2.339-.63 2.354-2.34l.03-.93-.03-.225c-.015-1.125-.735-2.355-2.369-2.355zm.93 1.05c-2.55 0-3.18 2.52-3.195 3.195l.12.06.03.915c.015 2.55.66 3.18 3.195 3.18 2.549 0 3.179-.735 3.194-3.18l.03-.915-.03-.06c-.015-1.44-1.005-3.195-2.409-3.195z"/></svg>',
+            spotify: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>',
+            linkedin: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>',
+            pinterest: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.668.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/></svg>',
+            snapchat: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12 1.033-.301a.42.42 0 0 1 .17-.029c.086 0 .172.024.251.074.15.098.218.265.182.446-.037.18-.18.319-.381.381-.381.12-.887.135-1.255.12-.149 0-.283-.015-.39-.03-.016.42-.016 1.146.045 1.801.165 1.747 1.547 2.701 2.646 3.512 1.317.99 2.461 1.841 2.461 4.021 0 1.747-1.18 3.09-2.94 3.09-.75 0-1.441-.27-2.13-.555-.69-.286-1.351-.57-2.16-.57-.81 0-1.47.284-2.16.57-.69.285-1.38.555-2.13.555-1.77 0-2.94-1.35-2.94-3.09 0-2.19 1.14-3.03 2.46-4.02 1.11-.81 2.49-1.77 2.65-3.51.06-.66.06-1.38.045-1.8-.105.015-.24.03-.39.03-.375.015-.87 0-1.245-.12-.21-.06-.36-.21-.39-.39-.03-.18.03-.345.18-.45.09-.06.18-.075.27-.075.06 0 .12.015.165.03.24.165.54.27.84.285.21 0 .33-.045.405-.09-.015-.18-.03-.345-.045-.525l-.015-.06c-.105-1.62-.225-3.645.3-4.83C7.86 1.065 11.216.795 12.206.795z"/></svg>',
+            telegram: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>'
+        };
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+            renderPlatforms();
+            renderHistory();
+            renderUpdates();
+            setupInputListeners();
+            animateStats();
+        });
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        function navigateTo(page) {
+            state.currentPage = page;
+            
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.page === page) item.classList.add('active');
+            });
+            
+            // Hide all pages
+            document.querySelectorAll('.page-content, .history-section, .updates-section, .about-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show target page
+            const targetPage = document.getElementById(`page-${page}`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            // Close mobile menu
+            document.getElementById('sidebar').classList.remove('mobile-open');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('sidebar').classList.toggle('mobile-open');
+        }
+
+        // ============================================
+        // THEME MANAGEMENT
+        // ============================================
+        function setTheme(theme) {
+            state.currentTheme = theme;
+            document.body.setAttribute('data-theme', theme);
+            
+            document.querySelectorAll('.theme-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.theme === theme);
+            });
+            
+            showToast('Theme Updated', `${theme.replace('-', ' ').replace(/\\b\\w/g, l => l.toUpperCase())} theme applied.`, 'info');
+        }
+
+        function loadSettings() {
+            const savedTheme = localStorage.getItem('shadowfetch_theme') || 'matte-black';
+            setTheme(savedTheme);
+            
+            // Apply saved settings to toggles
+            document.getElementById('toggleAutoQuality').classList.toggle('active', state.settings.autoQuality);
+            document.getElementById('toggleNotifications').classList.toggle('active', state.settings.notifications);
+            document.getElementById('toggleHistory').classList.toggle('active', state.settings.saveHistory);
+            document.getElementById('defaultFormat').value = state.settings.defaultFormat;
+            document.getElementById('languageSelect').value = state.settings.language;
+        }
+
+        function saveSettings() {
+            state.settings.autoQuality = document.getElementById('toggleAutoQuality').classList.contains('active');
+            state.settings.notifications = document.getElementById('toggleNotifications').classList.contains('active');
+            state.settings.saveHistory = document.getElementById('toggleHistory').classList.contains('active');
+            state.settings.defaultFormat = document.getElementById('defaultFormat').value;
+            state.settings.language = document.getElementById('languageSelect').value;
+            
+            localStorage.setItem('shadowfetch_settings', JSON.stringify(state.settings));
+            localStorage.setItem('shadowfetch_theme', state.currentTheme);
+            
+            closeSettings();
+            showToast('Settings Saved', 'Your preferences have been updated.', 'success');
+        }
+
+        function toggleSetting(el) {
+            el.classList.toggle('active');
+        }
+
+        // ============================================
+        // MODAL MANAGEMENT
+        // ============================================
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function openDonate() {
+            document.getElementById('donateModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDonate() {
+            document.getElementById('donateModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modals on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Close modals on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+                document.body.style.overflow = '';
+            }
+        });
+
+        // ============================================
+        // DOWNLOAD FUNCTIONALITY
+        // ============================================
+        function setupInputListeners() {
+            const input = document.getElementById('downloadInput');
+            input.addEventListener('input', debounce(detectPlatform, 300));
+            input.addEventListener('paste', () => setTimeout(detectPlatform, 100));
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') startDownload();
+            });
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function detectPlatform() {
+            const url = document.getElementById('downloadInput').value.trim();
+            const container = document.getElementById('platformDetected');
+            
+            if (!url) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            const detected = platforms.find(p => p.patterns.some(pattern => url.includes(pattern)));
+            
+            if (detected) {
+                const iconSvg = platformIcons[detected.icon] || '';
+                container.innerHTML = `
+                    <div class="platform-badge">
+                        ${iconSvg}
+                        <span>${detected.name} detected</span>
+                    </div>
+                    <div class="platform-quality">
+                        <span class="quality-chip active">HD</span>
+                        <span class="quality-chip">4K</span>
+                        <span class="quality-chip">Audio</span>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="platform-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                        </svg>
+                        <span>Universal Link</span>
+                    </div>
+                `;
+            }
+        }
+
+        async function pasteFromClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('downloadInput').value = text;
+                detectPlatform();
+                showToast('Pasted', 'Link pasted from clipboard.', 'success');
+            } catch (err) {
+                showToast('Error', 'Could not access clipboard. Please paste manually.', 'error');
+            }
+        }
+
+        function setDownloadMode(mode) {
+            state.downloadMode = mode;
+            document.querySelectorAll('.download-mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+        }
+
+        function startDownload() {
+            const url = document.getElementById('downloadInput').value.trim();
+            if (!url) {
+                showToast('Error', 'Please paste a valid URL first.', 'error');
+                document.getElementById('downloadInput').focus();
+                document.querySelector('.download-container').style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.querySelector('.download-container').style.animation = '';
+                }, 500);
+                return;
+            }
+            
+            state.isDownloading = true;
+            const btn = document.getElementById('downloadBtn');
+            btn.classList.add('loading');
+            btn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                </svg>
+                fetching...
+            `;
+            
+            // Simulate API fetch
+            setTimeout(() => {
+                showDownloadResult(url);
+                btn.classList.remove('loading');
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M7.5 12 12 16.5m0 0L16.5 12m-4.5 4.5V3" />
+                    </svg>
+                    download
+                `;
+                state.isDownloading = false;
+            }, 1500);
+        }
+
+        function showDownloadResult(url) {
+            const result = document.getElementById('downloadResult');
+            const detected = platforms.find(p => p.patterns.some(pattern => url.includes(pattern)));
+            const platformName = detected ? detected.name : 'Unknown Platform';
+            
+            document.getElementById('resultTitle').textContent = `Video from ${platformName}`;
+            document.getElementById('resultPlatform').innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/></svg>
+                ${platformName}
+            `;
+            
+            // Generate quality options based on mode
+            const qualityContainer = document.getElementById('qualityOptions');
+            const qualities = state.downloadMode === 'audio' 
+                ? [
+                    { res: '320kbps', format: 'MP3', size: '8.5 MB' },
+                    { res: '256kbps', format: 'MP3', size: '6.8 MB' },
+                    { res: '128kbps', format: 'MP3', size: '3.4 MB' },
+                    { res: 'Lossless', format: 'FLAC', size: '24 MB' }
+                  ]
+                : [
+                    { res: '4K', format: 'MP4', size: '245 MB' },
+                    { res: '1080p', format: 'MP4', size: '85 MB' },
+                    { res: '720p', format: 'MP4', size: '45 MB' },
+                    { res: '480p', format: 'MP4', size: '22 MB' }
+                  ];
+            
+            qualityContainer.innerHTML = qualities.map((q, i) => `
+                <div class="quality-option ${i === 1 ? 'active' : ''}" onclick="selectQuality(this, '${q.res}')">
+                    <span class="quality-option-res">${q.res}</span>
+                    <span class="quality-option-format">${q.format}</span>
+                    <span class="quality-option-size">${q.size}</span>
+                </div>
+            `).join('');
+            
+            state.selectedQuality = qualities[1].res;
+            
+            result.classList.add('active');
+            document.getElementById('progressContainer').classList.remove('active');
+            document.getElementById('resultActions').style.display = 'flex';
+            
+            // Add to history
+            addToHistory(url, platformName, qualities[1].res);
+        }
+
+        function selectQuality(el, quality) {
+            document.querySelectorAll('.quality-option').forEach(opt => opt.classList.remove('active'));
+            el.classList.add('active');
+            state.selectedQuality = quality;
+        }
+
+        function confirmDownload() {
+            document.getElementById('resultActions').style.display = 'none';
+            document.getElementById('progressContainer').classList.add('active');
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        document.getElementById('progressContainer').classList.remove('active');
+                        document.getElementById('downloadResult').classList.remove('active');
+                        document.getElementById('downloadInput').value = '';
+                        document.getElementById('platformDetected').innerHTML = '';
+                        
+                        showToast('Download Complete', 'Your file has been downloaded successfully.', 'success');
+                    }, 500);
+                }
+                
+                document.getElementById('progressBarFill').style.width = `${progress}%`;
+                document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
+                document.getElementById('progressLabel').textContent = progress < 30 ? 'Connecting...' : progress < 70 ? 'Downloading...' : 'Finalizing...';
+            }, 300);
+        }
+
+        function cancelDownload() {
+            document.getElementById('downloadResult').classList.remove('active');
+            document.getElementById('downloadInput').value = '';
+            document.getElementById('platformDetected').innerHTML = '';
+            showToast('Cancelled', 'Download cancelled.', 'info');
+        }
+
+        // ============================================
+        // HISTORY MANAGEMENT
+        // ============================================
+        function addToHistory(url, platform, quality) {
+            if (!state.settings.saveHistory) return;
+            
+            const historyItem = {
+                id: Date.now(),
+                url: url,
+                platform: platform,
+                quality: quality,
+                date: new Date().toISOString(),
+                status: 'completed'
+            };
+            
+            state.downloadHistory.unshift(historyItem);
+            if (state.downloadHistory.length > 50) state.downloadHistory.pop();
+            
+            localStorage.setItem('shadowfetch_history', JSON.stringify(state.downloadHistory));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('historyList');
+            
+            if (state.downloadHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                        </div>
+                        <div class="empty-state-title">No downloads yet</div>
+                        <div class="empty-state-desc">Your download history will appear here once you start downloading.</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = state.downloadHistory.map(item => `
+                <div class="history-item">
+                    <div class="history-thumb">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+                        </svg>
+                    </div>
+                    <div class="history-info">
+                        <div class="history-title">${item.platform} — ${item.quality}</div>
+                        <div class="history-meta">
+                            <span>${new Date(item.date).toLocaleDateString()}</span>
+                            <span>${new Date(item.date).toLocaleTimeString()}</span>
+                        </div>
+                    </div>
+                    <span class="history-status completed">Done</span>
+                    <div class="history-actions">
+                        <button class="history-action-btn" onclick="reDownload('${item.url}')" title="Download Again">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M7.5 12 12 16.5m0 0L16.5 12m-4.5 4.5V3" />
+                            </svg>
+                        </button>
+                        <button class="history-action-btn" onclick="deleteHistoryItem(${item.id})" title="Remove">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function reDownload(url) {
+            document.getElementById('downloadInput').value = url;
+            navigateTo('home');
+            detectPlatform();
+            startDownload();
+        }
+
+        function deleteHistoryItem(id) {
+            state.downloadHistory = state.downloadHistory.filter(item => item.id !== id);
+            localStorage.setItem('shadowfetch_history', JSON.stringify(state.downloadHistory));
+            renderHistory();
+            showToast('Deleted', 'Item removed from history.', 'info');
+        }
+
+        // ============================================
+        // PLATFORMS RENDERING
+        // ============================================
+        function renderPlatforms() {
+            const grid = document.getElementById('platformsGrid');
+            grid.innerHTML = platforms.map(p => `
+                <div class="platform-card" title="${p.name}">
+                    <div class="platform-card-icon">
+                        ${platformIcons[p.icon] || ''}
+                    </div>
+                    <div class="platform-card-name">${p.name}</div>
+                    <div class="platform-card-status">Working</div>
+                </div>
+            `).join('');
+        }
+
+        // ============================================
+        // UPDATES RENDERING
+        // ============================================
+        function renderUpdates() {
+            const updates = [
+                {
+                    version: 'v2.0.0',
+                    date: 'June 12, 2026',
+                    changes: [
+                        { text: 'Complete UI redesign with 4 new themes', badge: 'new' },
+                        { text: 'Added support for 5 new platforms', badge: 'new' },
+                        { text: 'Download history with local storage', badge: 'new' },
+                        { text: 'Donation system integration', badge: 'new' },
+                        { text: 'Fixed audio-only download issues', badge: 'fix' },
+                        { text: 'Improved download speed by 40%', badge: 'improvement' }
+                    ]
+                },
+                {
+                    version: 'v1.5.0',
+                    date: 'May 28, 2026',
+                    changes: [
+                        { text: 'Added mobile responsive design', badge: 'new' },
+                        { text: 'Fixed Instagram reel downloads', badge: 'fix' },
+                        { text: 'Better error handling', badge: 'improvement' }
+                    ]
+                },
+                {
+                    version: 'v1.0.0',
+                    date: 'May 1, 2026',
+                    changes: [
+                        { text: 'Initial release of ShadowFetch', badge: 'new' },
+                        { text: 'Support for YouTube, TikTok, Instagram', badge: 'new' },
+                        { text: 'Basic download functionality', badge: 'new' }
+                    ]
+                }
+            ];
+            
+            document.getElementById('updatesList').innerHTML = updates.map((update, index) => `
+                <div class="update-item">
+                    <div class="update-timeline">
+                        <div class="update-dot"></div>
+                        ${index < updates.length - 1 ? '<div class="update-line"></div>' : ''}
+                    </div>
+                    <div class="update-content">
+                        <div class="update-version">
+                            ${update.version}
+                            ${index === 0 ? '<span class="update-badge new">Latest</span>' : ''}
+                        </div>
+                        <div class="update-date">${update.date}</div>
+                        <ul class="update-changes">
+                            ${update.changes.map(c => `
+                                <li>
+                                    ${c.text}
+                                    ${c.badge ? `<span class="update-badge ${c.badge}">${c.badge}</span>` : ''}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ============================================
+        // DONATION SYSTEM
+        // ============================================
+        let selectedDonateAmount = 10;
+        let selectedPaymentMethod = null;
+
+        function selectDonateTier(el) {
+            document.querySelectorAll('.donate-tier').forEach(tier => tier.classList.remove('active'));
+            el.classList.add('active');
+            selectedDonateAmount = parseInt(el.dataset.amount);
+            document.getElementById('customAmount').value = '';
+        }
+
+        function selectPaymentMethod(el) {
+            document.querySelectorAll('.donate-method').forEach(method => method.style.borderColor = '');
+            el.style.borderColor = 'var(--accent)';
+            selectedPaymentMethod = el;
+        }
+
+        function processDonation() {
+            const customAmount = document.getElementById('customAmount').value;
+            const amount = customAmount || selectedDonateAmount;
+            
+            if (!amount || amount < 1) {
+                showToast('Error', 'Please select or enter a valid amount.', 'error');
+                return;
+            }
+            
+            if (!selectedPaymentMethod) {
+                showToast('Error', 'Please select a payment method.', 'error');
+                return;
+            }
+            
+            showToast('Thank You!', `Processing $${amount} donation...`, 'success');
+            closeDonate();
+            
+            // In production, this would redirect to Stripe/PayPal
+            setTimeout(() => {
+                showToast('Success', 'Thank you for supporting ShadowFetch! ❤️', 'success');
+            }, 2000);
+        }
+
+        // ============================================
+        // TOAST NOTIFICATIONS
+        // ============================================
+        function showToast(title, message, type = 'info') {
+            if (!state.settings.notifications && type !== 'error') return;
+            
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            const icons = {
+                success: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>',
+                error: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>',
+                info: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg>'
+            };
+            
+            toast.innerHTML = `
+                <div class="toast-icon ${type}">
+                    ${icons[type]}
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (toast.parentElement) toast.remove();
+            }, 5000);
+        }
+
+        // ============================================
+        // ANIMATED STATS
+        // ============================================
+        function animateStats() {
+            const stats = [
+                { el: 'statDownloads', target: 2400000, suffix: 'M+' },
+                { el: 'statPlatforms', target: 15, suffix: '+' },
+                { el: 'statUsers', target: 500000, suffix: 'K+' },
+                { el: 'statUptime', target: 99.9, suffix: '%', decimals: 1 }
+            ];
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        stats.forEach(stat => {
+                            const el = document.getElementById(stat.el);
+                            if (!el) return;
+                            
+                            let current = 0;
+                            const increment = stat.target / 60;
+                            const timer = setInterval(() => {
+                                current += increment;
+                                if (current >= stat.target) {
+                                    current = stat.target;
+                                    clearInterval(timer);
+                                }
+                                
+                                let display;
+                                if (stat.target >= 1000000) {
+                                    display = (current / 1000000).toFixed(1);
+                                } else if (stat.target >= 1000) {
+                                    display = (current / 1000).toFixed(0);
+                                } else {
+                                    display = current.toFixed(stat.decimals || 0);
+                                }
+                                
+                                el.textContent = display + stat.suffix;
+                            }, 30);
+                        });
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            const statsSection = document.querySelector('.stats-section');
+            if (statsSection) observer.observe(statsSection);
+        }
+
+        // ============================================
+        // KEYBOARD SHORTCUTS
+        // ============================================
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + V to paste and focus
+            if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+                setTimeout(() => {
+                    document.getElementById('downloadInput').focus();
+                }, 100);
+            }
+            
+            // Ctrl/Cmd + Enter to download
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                startDownload();
+            }
+            
+            // Ctrl/Cmd + , for settings
+            if ((e.ctrlKey || e.metaKey) && e.key === ',') {
+                e.preventDefault();
+                openSettings();
+            }
+        });
+
+        // ============================================
+        // SERVICE WORKER REGISTRATION (PWA Ready)
+        // ============================================
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:text/javascript,').catch(() => {
+                // Silent fail for demo
+            });
+        }
+
+        // ============================================
+        // CONSOLE EASTER EGG
+        // ============================================
+        console.log('%c ShadowFetch ', 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 24px; font-weight: bold; padding: 10px 20px; border-radius: 8px;');
+        console.log('%c Built with love by the ShadowFetch Team ', 'color: #a0a0a0; font-size: 12px;');
+        console.log('%c Want to contribute? Visit our GitHub! ', 'color: #4ade80; font-size: 12px;');
+    </script>
+</body>
+</html>'''
+
+# Save the file
+with open('/mnt/agents/output/shadowfetch.html', 'w', encoding='utf-8') as f:
+    f.write(html_code)
+
+# Count words in the code
+word_count = len(html_code.split())
+print(f"Total words in code: {word_count}")
